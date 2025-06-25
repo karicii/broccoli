@@ -1,25 +1,31 @@
 #include <iostream>
 #include <string>
-
+#include <vector>
+void print_usage() {
+    std::cout << "Kullanım: ./mycli <komut>\n"
+              << "Kullanılabilir komutlar için './mycli -help' yazın." << std::endl;
+}
+void print_help() {
+    std::cout << "Kullanılabilir Komutlar:\n"
+              << "  -aya, --aya      Rastgele bir mesaj gösterir\n"
+              << "  -help, --help    Bu yardım menüsünü gösterir" << std::endl;
+}
 int main(int argc, char* argv[]) {
-    if (argc < 2) {
-        std::cout << "Komut girilmedi.\nKullanım: ./mycli -help" << std::endl;
+    const std::vector<std::string> args(argv + 1, argv + argc);
+    if (args.empty()) {
+        std::cerr << "Hata: Komut girilmedi." << std::endl; 
+        print_usage();
+        return 1; 
+    }
+    const std::string& command = args[0];
+    if (command == "-help" || command == "--help") {
+        print_help();
+    } else if (command == "-aya" || command == "--aya") {
+        std::cout << "Bu, örnek bir komutun çıktısıdır! :)" << std::endl;
+    } else {
+                std::cerr << "Hata: Bilinmeyen komut '" << command << "'" << std::endl;
+        print_usage();
         return 1;
-    }
-
-    std::string command = argv[1];
-
-    if (command == "-help") {
-        std::cout << "Kullanılabilir Komutlar:\n";
-        std::cout << "-aya   Rastgele bir mesaj gösterir\n";
-        std::cout << "-help  Bu ekranı gösterir\n";
-    }
-    else if (command == "-aya") {
-        std::cout << "Bu, örnek bir komutun çıktısıdır! :)\n";
-    }
-    else {
-        std::cout << "Bilinmeyen Komut: " << command << "\n";
-        std::cout << "Yardım için: ./mycli -help" << std::endl;
     }
 
     return 0;
